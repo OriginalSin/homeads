@@ -1,4 +1,5 @@
 ;
+var proxy = '//maps.kosmosnimki.ru/ApiSave.ashx?WrapStyle=None&get=';
 
 var markers = {},
     mapcluster,
@@ -109,7 +110,7 @@ function openSuperBigPopoup (x) {
 
     $.ajax({
         type: "POST",
-        url: "/engine/popup.php",
+        url: "http://www.homeads.ca/engine/popup.php",
         data: {
             'popupId': popupId,
         },
@@ -974,7 +975,6 @@ function bindEventsToPopUpper(e) {
         bricks.resize(true).pack().update();
     }
 
-var proxy = '//maps.kosmosnimki.ru/ApiSave.ashx?WrapStyle=None&get=';
     function getFeatures(params) {
 		L.gmx.getJSON(proxy + 'http://www.homeads.ca/engine/box.php' + encodeURIComponent(params), {type: 'json'})
 			.then(function(json) {
