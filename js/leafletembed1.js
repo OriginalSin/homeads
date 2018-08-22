@@ -1016,7 +1016,7 @@ function bindEventsToPopUpper(e) {
     }
 
     function getFeatures() {
-		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/box.php', getMapParams(), { callbackParamName: 'callback' })
+		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/box_copy.php', getMapParams(), { callbackParamName: 'callback' })
 			.then(gotPlots);
 	}
 
