@@ -991,6 +991,28 @@ function bindEventsToPopUpper(e) {
 			s: minll.lat,
 			e: maxll.lng,
 			n: maxll.lat,
+			'sortType':sortType,
+			'listing_price_from': listing_price_from,
+			'listing_price_to': listing_price_to,
+			'residential': $('input[name="residential"]').val(),
+			'homeType': $('input[name="home-type"]').val(),
+			'priceFrom': $('input[name="price-from"]').val(),
+			'priceTo': $('input[name="price-to"]').val(),
+			'rentFrom': $('input[name="rent-from"]').val(),
+			'rentTo': $('input[name="rent-to"]').val(),
+			'interioFrom': $('input[name="interio-from"]').val(),
+			'interioTo': $('input[name="interio-to"]').val(),
+			'dateD': $('#datepicker').val(),
+			'beds': $('input[name="beds"]').val(),
+			'bath': $('input[name="bath"]').val(),
+			'openHouseOnly': $('input[name="openHouseOnly"]').val(),
+			'waterfront': $('input[name="waterfront"]').val(),
+			'pool': $('input[name="pool"]').val(),
+			'fireplace': $('input[name="fireplace"]').val(),
+			'searchValue': searchValue,
+			'landType':  $('input[name="land-type"]').val(),
+		    'bstories': $('input[name="bstories"]').val(),
+		    'attachstyle': $('input[name="attachstyle"]').val()
         };
     }
 
@@ -1034,29 +1056,6 @@ function bindEventsToPopUpper(e) {
 		}
 		var par = L.extend({
 			pageNum: num,
-			'sortType':sortType,
-			'listing_price_from': listing_price_from,
-			'listing_price_to': listing_price_to,
-			'residential': $('input[name="residential"]').val(),
-			'homeType': $('input[name="home-type"]').val(),
-			'priceFrom': $('input[name="price-from"]').val(),
-			'priceTo': $('input[name="price-to"]').val(),
-			'rentFrom': $('input[name="rent-from"]').val(),
-			'rentTo': $('input[name="rent-to"]').val(),
-			'interioFrom': $('input[name="interio-from"]').val(),
-			'interioTo': $('input[name="interio-to"]').val(),
-			'dateD': $('#datepicker').val(),
-			'beds': $('input[name="beds"]').val(),
-			'bath': $('input[name="bath"]').val(),
-			'openHouseOnly': $('input[name="openHouseOnly"]').val(),
-			'waterfront': $('input[name="waterfront"]').val(),
-			'pool': $('input[name="pool"]').val(),
-			'fireplace': $('input[name="fireplace"]').val(),
-			'searchValue': searchValue,
-			'sortType': sortType,
-			'landType':  $('input[name="land-type"]').val(),
-		    'bstories': $('input[name="bstories"]').val(),
-		    'attachstyle': $('input[name="attachstyle"]').val()
 		}, getMapParams());
 		listings.appendChild(infiniteScroll.listLoader);
 		
