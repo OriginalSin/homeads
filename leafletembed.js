@@ -968,7 +968,7 @@ function bindEventsToPopUpper(e) {
         });
 		// map.getContainer().style.position = 'fixed';
 
-        // askForPlots();
+        askForPlots();
 
     });
 
@@ -976,13 +976,22 @@ function bindEventsToPopUpper(e) {
         bricks.resize(true).pack().update();
     }
 
+    function getMapParams() {
+		var bounds = map.getBounds(),
+			minll = bounds.getSouthWest(),
+			maxll = bounds.getNorthEast();
+		return {
+			w: minll.lng,
+			s: minll.lat,
+			e: maxll.lng,
+			n: maxll.lat,
+        };
+    }
+
     function getFeatures(params) {
-		L.gmx.getJSON(proxy + 'http://www.homeads.ca/engine/box.php' + encodeURIComponent(params), {type: 'json'})
-			.then(function(json) {
-				if (json.res && json.res.Status === 'ok') {
-					gotPlots(JSON.parse(json.res.Result));
-				}
-		});
+		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/box.php', getMapParams(), { callbackParamName: 'callback' })
+		// L.gmx.getJSON(proxy + 'http://www.homeads.ca/engine/box.php' + encodeURIComponent(params), {type: 'json'})
+			.then(gotPlots);
 	}
 
 	var listings = document.getElementById('listings');
@@ -1017,12 +1026,8 @@ function bindEventsToPopUpper(e) {
 		if (!num) {
 			infiniteScroll.pagenum = num = 1;
 		}
-		var par = {
+		var par = L.extend({
 			pageNum: num,
-			w: minll.lng,
-			s: minll.lat,
-			e: maxll.lng,
-			n: maxll.lat,
 			'sortType':sortType,
 			'listing_price_from': listing_price_from,
 			'listing_price_to': listing_price_to,
@@ -1046,7 +1051,7 @@ function bindEventsToPopUpper(e) {
 			'landType':  $('input[name="land-type"]').val(),
 		    'bstories': $('input[name="bstories"]').val(),
 		    'attachstyle': $('input[name="attachstyle"]').val()
-		};
+		}, getMapParams());
 		listings.appendChild(infiniteScroll.listLoader);
 		
 		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/boxlistings_copy.php', par, { callbackParamName: 'callback' })
@@ -1288,7 +1293,6 @@ infiniteScroll.masonryCont.scrollTop += 1;
 	            $('html, body').animate({scrollTop: 0}, 500);
 	        }
 	
-/*
 	        if ($('#listings .content').length !== 0) {
 	            $('#listings .content').remove();
 	            var headerHeight = $('header').outerHeight(),
@@ -1301,12 +1305,7 @@ infiniteScroll.masonryCont.scrollTop += 1;
 	           overflow: 'hidden',
 	        });
 	        document.querySelector('.masonry_cont').scrollTop = 0;
-*/
 	}, 1100);	
-
-
-
-
 
     }
 
