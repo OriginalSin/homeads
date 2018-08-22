@@ -940,11 +940,17 @@ function bindEventsToPopUpper(e) {
     $(document).on('initMap', function (e, lat, lon, zoom) {
         map = new L.Map('map',{zoomSnap:0.2,wheelPxPerZoomLevel: 300, srs:3857});
         var osmUrl = 'https://www.homeads.ca/tiles.php?z={z}&x={x}&y={y}&r=mapnik';
-        var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-        var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 15, attribution: osmAttrib});
+
+        // var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+        // var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 15, attribution: osmAttrib});
 
         map.setView(new L.LatLng(lat, lon), zoom);
-        map.addLayer(osm);
+
+        var mapboxUrl = '//api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29zbW9zbmlta2lydSIsImEiOiJjaWhxMHNlZDgwNGFldHBtMjdyejQ3YTJ3In0.3UAAWcIBabrbUhHwmp1WjA',
+			mapboxAttrib = '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a>';
+			mapbox = new L.TileLayer(mapboxUrl, {minZoom: 10, maxZoom: 15, attribution: mapboxAttrib});
+        map.addLayer(mapbox);
+        // map.addLayer(osm);
 
         mapcluster = L.markerClusterGroup({
             chunkedLoading: true,
