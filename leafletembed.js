@@ -241,7 +241,7 @@ function openSuperBigPopoup (x) {
                     $('<img>', {
                         src: $('.cluster-popup-carousel-thumb').find('img').attr('src'),
                         data_item: $('.cluster-popup-carousel-thumb').find('img').attr('data-item')
-                    }),
+                    })
                 );
 
                 if ($('.cluster-popup-carousel-thumb img').length !== 1 && $('.cluster-popup-carousel-thumb img').length !== 0) {
@@ -966,8 +966,9 @@ function bindEventsToPopUpper(e) {
             $(".cluster-popup-el").remove();
             $('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
         });
+		// map.getContainer().style.position = 'fixed';
 
-        askForPlots();
+        // askForPlots();
 
     });
 
@@ -982,55 +983,140 @@ function bindEventsToPopUpper(e) {
 					gotPlots(JSON.parse(json.res.Result));
 				}
 		});
-
-                // $.post('http://www.homeads.ca/engine/box.php' + params, {
-                    // 'listing_price_from': listing_price_from,
-                    // 'listing_price_to': listing_price_to,
-                    // 'residential': $('input[name="residential"]').val(),
-                    // 'homeType': $('input[name="home-type"]').val(),
-                    // 'priceFrom': $('input[name="price-from"]').val(),
-                    // 'priceTo': $('input[name="price-to"]').val(),
-                    // 'rentFrom': $('input[name="rent-from"]').val(),
-                    // 'rentTo': $('input[name="rent-to"]').val(),
-                    // 'interioFrom': $('input[name="interio-from"]').val(),
-                    // 'interioTo': $('input[name="interio-to"]').val(),
-                    // 'dateD': $('#datepicker').val(),
-                    // 'beds': $('input[name="beds"]').val(),
-                    // 'bath': $('input[name="bath"]').val(),
-                    // 'openHouseOnly': $('input[name="openHouseOnly"]').val(),
-                    // 'waterfront': $('input[name="waterfront"]').val(),
-                    // 'pool': $('input[name="pool"]').val(),
-                    // 'fireplace': $('input[name="fireplace"]').val(),
-                    // 'searchValue': searchValue,
-                    // 'sortType': sortType,
-                    // 'landType':  $('input[name="land-type"]').val(),
-		    // 'bstories': $('input[name="bstories"]').val(),
-		    // 'attachstyle': $('input[name="attachstyle"]').val()
-                // }, function (data) {
-                    // if (data) gotPlots(data);
-                // });
 	}
-    function getBoxListings(params) {
-		L.gmx.getJSON(proxy + 'http://www.homeads.ca/engine/boxlistings.php' + encodeURIComponent(params), {type: 'json'})
-			.then(function(json) {
-				if (json.res && json.res.Status === 'ok') {
-					var res = JSON.parse(json.res.Result);
+
+	var listings = document.getElementById('listings');
+	var infiniteScroll = {
+		pagenum: 1,
+		left_listings: 0,
+		//pageSize: 100,
+		masonryCont: listings.getElementsByClassName('masonry_cont')[0],
+		listLoader: L.DomUtil.create('div', 'list-loader')
+	};
+	infiniteScroll.listLoader.innerHTML = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
+	// window.onscroll = function(ev) {
+	infiniteScroll.masonryCont.onscroll = function(ev) {
+		if (infiniteScroll.left_listings > 0) {
+			var target = ev.target,
+				// target.scrollHeight,
+				scrolled = window.pageYOffset || document.documentElement.scrollTop;
+			if (target.scrollTop + target.clientHeight > target.scrollHeight - 20) {
+				infiniteScroll.pagenum++;
+				var bounds = map.getBounds(),
+					minll = bounds.getSouthWest(),
+					maxll = bounds.getNorthEast();
+				getBoxListings(infiniteScroll.pagenum);
+			}
+		}
+	}
+
+    function getBoxListings(num) {
+		var bounds = map.getBounds(),
+			minll = bounds.getSouthWest(),
+			maxll = bounds.getNorthEast();
+		if (!num) {
+			infiniteScroll.pagenum = num = 1;
+		}
+		var par = {
+			pageNum: num,
+			w: minll.lng,
+			s: minll.lat,
+			e: maxll.lng,
+			n: maxll.lat,
+			'sortType':sortType,
+			'listing_price_from': listing_price_from,
+			'listing_price_to': listing_price_to,
+			'residential': $('input[name="residential"]').val(),
+			'homeType': $('input[name="home-type"]').val(),
+			'priceFrom': $('input[name="price-from"]').val(),
+			'priceTo': $('input[name="price-to"]').val(),
+			'rentFrom': $('input[name="rent-from"]').val(),
+			'rentTo': $('input[name="rent-to"]').val(),
+			'interioFrom': $('input[name="interio-from"]').val(),
+			'interioTo': $('input[name="interio-to"]').val(),
+			'dateD': $('#datepicker').val(),
+			'beds': $('input[name="beds"]').val(),
+			'bath': $('input[name="bath"]').val(),
+			'openHouseOnly': $('input[name="openHouseOnly"]').val(),
+			'waterfront': $('input[name="waterfront"]').val(),
+			'pool': $('input[name="pool"]').val(),
+			'fireplace': $('input[name="fireplace"]').val(),
+			'searchValue': searchValue,
+			'sortType': sortType,
+			'landType':  $('input[name="land-type"]').val(),
+		    'bstories': $('input[name="bstories"]').val(),
+		    'attachstyle': $('input[name="attachstyle"]').val()
+		};
+		listings.appendChild(infiniteScroll.listLoader);
+		
+		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/boxlistings_copy.php', par, { callbackParamName: 'callback' })
+			.then(function(res) {
+				if (infiniteScroll.listLoader.parentNode) {
+					infiniteScroll.listLoader.parentNode.removeChild(infiniteScroll.listLoader);
+				}
+				infiniteScroll.left_listings = res.left_listings || 0;
+				if (res.html && res.html.length) {
 					$('.not_found').remove();
 
-					var masonryWrapper = $("#listings .masonry_cont");
-					masonryWrapper.children(".grid-item").remove();
-					res.html = res.html.join("");
-					masonryWrapper.html(res.html);
-
-					if (res.html.length == 0) {
-						$('.masonry_cont').append($('<div>', { class: 'not_found', text: 'Sorry, there are no listings to match your criteria. Please expand your criteria or move around the map to search in different location. Thank You.'}))
+					if (infiniteScroll.pagenum < 2) {
+						var masonryWrapper = $("#listings .masonry_cont");
+						masonryWrapper.children(".grid-item").remove();
+						res.html = res.html.join("");
+						masonryWrapper.html(res.html);
+					} else {
+						var rail = infiniteScroll.masonryCont.getElementsByClassName('ps__rail-x')[0];
+						if (rail) {
+							rail.parentNode.removeChild(rail);
+						}
+						rail = infiniteScroll.masonryCont.getElementsByClassName('ps__rail-y')[0];
+						if (rail) {
+							rail.parentNode.removeChild(rail);
+						}
+						for (var i = 0, len = res.html.length; i < len; i++) {
+							var it = L.DomUtil.create('div', 'hidden', document.body);
+							it.innerHTML = res.html[i];
+							infiniteScroll.masonryCont.appendChild(it.children[0]);
+							it.parentNode.removeChild(it);
+						}
 					}
+
+					// if (res.html.length == 0) {
+						// $('.masonry_cont').append($('<div>', { class: 'not_found', text: 'Sorry, there are no listings to match your criteria. Please expand your criteria or move around the map to search in different location. Thank You.'}))
+					// }
 
 					if ( window.innerWidth > 430 ) {
 						reBrick();
 					}
+infiniteScroll.masonryCont.scrollTop += 1;
 				}
 		});
+		
+		// L.gmxUtil.request({
+			// url: proxy + 'http://www.homeads.ca/engine/boxlistings.php' + encodeURIComponent(params),
+			// callback: function(res) {
+// console.log('ddddddd', res);
+			// }
+		// });
+		// L.gmx.getJSON(proxy + 'http://www.homeads.ca/engine/boxlistings.php' + encodeURIComponent(params), {type: 'json'})
+			// .then(function(json) {
+				// if (json.res && json.res.Status === 'ok') {
+					// var res = JSON.parse(json.res.Result);
+					// $('.not_found').remove();
+
+					// var masonryWrapper = $("#listings .masonry_cont");
+					// masonryWrapper.children(".grid-item").remove();
+					// res.html = res.html.join("");
+					// masonryWrapper.html(res.html);
+
+					// if (res.html.length == 0) {
+						// $('.masonry_cont').append($('<div>', { class: 'not_found', text: 'Sorry, there are no listings to match your criteria. Please expand your criteria or move around the map to search in different location. Thank You.'}))
+					// }
+
+					// if ( window.innerWidth > 430 ) {
+						// reBrick();
+					// }
+				// }
+		// });
                // $.post('http://www.homeads.ca/engine/boxlistings.php' + params, {
                     // 'sortType':sortType,
                     // 'listing_price_from': listing_price_from,
@@ -1089,11 +1175,11 @@ function bindEventsToPopUpper(e) {
             if ($('.select-regime-marker').hasClass('active')) {
 				getFeatures(params);
             } else {
-				getBoxListings(params);
+				getBoxListings();
             }
 
         } else {
-			getBoxListings(params);
+			getBoxListings();
 			getFeatures(params);
             // $.post('/engine/boxlistings.php' + params, {
                 // 'sortType': sortType,
@@ -1202,6 +1288,7 @@ function bindEventsToPopUpper(e) {
 	            $('html, body').animate({scrollTop: 0}, 500);
 	        }
 	
+/*
 	        if ($('#listings .content').length !== 0) {
 	            $('#listings .content').remove();
 	            var headerHeight = $('header').outerHeight(),
@@ -1214,6 +1301,7 @@ function bindEventsToPopUpper(e) {
 	           overflow: 'hidden',
 	        });
 	        document.querySelector('.masonry_cont').scrollTop = 0;
+*/
 	}, 1100);	
 
 
