@@ -442,75 +442,6 @@ if (listing_ID !== '') {
     openSuperBigPopoup (+listing_ID);
 }
 
-
-function getPopUpper(markerData) {
-    var images = '';
-    if (markerData[6]) {
-        for (var i = 1; i <= markerData[6]; i++) {
-            images += '<div class="item"><img onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';" src="https://www.homeads.ca/img/' + markerData[0] + '_' + i + '.jpg"></div>';
-        }
-    } else images = '<div class="no-image"></div>';
-
-
-    return '<div class="info-popup">' +
-        '   <div class="for-type">' + markerData[8] + '</div>' +
-        '   <i class="mdi mdi-heart" data_house="' + markerData[0] + '" onclick="bookList(' + markerData[0] + ')"></i>' +
-        '   <div class="slider-wrapper owl-carousel d-flex align-items-center">' + images + '</div>' +
-        '   <div class="cont-wrap">' +
-        '       <div>' +
-        '           <span class="beds"><i class="mdi mdi-hotel"></i> ' + markerData[4] + '</span>' +
-        '           <span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + markerData[5] + '</span>' +
-        '       </div>' +
-        '       <h3 class="info-popup-title">' + markerData[7] + '</h3>' +
-        '       <div><span class="price">$' + markerData[3] + '</span></div>' +
-        '   </div>' +
-        '</div>';
-}
-
-function bindEventsToPopUpper(e) {
-
-    $('.leaflet-popup-close-button').on('click', function() {
-        $('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
-        return false;
-    });
-
-    if ( window.innerWidth < 550 ) {
-        $('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').addClass('hidden');
-    }
-    $('.cluster-popup-el').remove();
-    var element = $(e.target._popup._contentNode);
-
-    if (window.pageYOffset > 0) {
-        $('html, body').animate({scrollTop: 0}, 500);
-    };
-
-    element.find(".info-popup-title").on('click', function () {
-        openSuperBigPopoup(e.target.markerData[0]);
-    });
-
-    element.addClass("owl-done").find(".slider-wrapper").owlCarousel({
-        loop: false,
-        margin: 0,
-        nav: true,
-        responsive: {
-            0: {
-                items: 1
-            },
-            600: {
-                items: 1
-            },
-            1000: {
-                items: 1
-            }
-        },
-        navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"]
-    }).trigger('refresh.owl.carousel');
-
-    map.setView(new L.LatLng(e.latlng.lat + 0.007, e.latlng.lng));
-
-}
-
-
 (function ($) {
 
 
@@ -937,13 +868,18 @@ function bindEventsToPopUpper(e) {
     });
 
     $(document).on('initMap', function (e, lat, lon, zoom) {
-        map = new L.Map('map',{zoomSnap:0.2,wheelPxPerZoomLevel: 300, srs:3857});
+		map = new L.Map('map',{
+			center: [lat, lon],
+			zoom: zoom,
+			zoomSnap:0.2,
+			wheelPxPerZoomLevel: 300
+		});
         var osmUrl = 'https://www.homeads.ca/tiles.php?z={z}&x={x}&y={y}&r=mapnik';
 
         // var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
         // var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 15, attribution: osmAttrib});
 
-        map.setView(new L.LatLng(lat, lon), zoom);
+        // map.setView(new L.LatLng(lat, lon), zoom);
 
         var mapboxUrl = '//api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29zbW9zbmlta2lydSIsImEiOiJjaWhxMHNlZDgwNGFldHBtMjdyejQ3YTJ3In0.3UAAWcIBabrbUhHwmp1WjA',
 			mapboxAttrib = '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a>';
@@ -962,7 +898,60 @@ function bindEventsToPopUpper(e) {
             }
         });
 
-        mapcluster.on('clusterclick', onMapClusterClick);
+        // mapcluster.on('clusterclick', onMapClusterClick);
+        mapcluster.on('clusterclick', function (e) {
+				$('.cluster-popup-el').remove();
+				$('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
+
+				if (map._animateToZoom >= 15) {
+					map.setView(e.latlng, map.getZoom());
+					var ids = e.layer.getAllChildMarkers().map(function(it) {
+						return it.markerData[0];
+					});
+					return ids.join(', ');
+
+					var markers = e.layer.getAllChildMarkers(),
+						container = $('<div>', {class: 'cluster-popup-el'})
+						.data('claster-coords', e.latlng),
+						cont = '';
+
+					for (var i = 0; i < markers.length; i++) {
+						var element = $(markers[i].suttonPopupElement);
+
+						cont += '<div class="items d-flex" data_id="' + markers[i].markerData[0] + '">' +
+									'<div class="items-img-wrapper">' +
+										'<img  onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))" src="https://www.homeads.ca/img_thumbs/' + markers[i].markerData[0] + '_1.jpg" onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';">' +
+										'<i onclick="bookList($(this).attr(\'data_house\'))" class="mdi mdi-heart" data_house="' + markers[i].markerData[0] + '"></i>' +
+										'<div class="for-type">' + markers[i].markerData[8] + '</div>' +
+									'</div>' +
+									'<div class="items-content-wrapper d-flex flex-column">' +
+										'<h3 onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))">' + element.find('h3').text() + '</h3>' +
+										'<div class="d-flex">' +
+											'<span class="beds"><i class="mdi mdi-hotel"></i> ' + element.find('.beds').text() + '</span>' +
+											'<span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + element.find('.bath').text() + '</span>' +
+										'</div>' +
+										'<div>' +
+											'<span class="price">' + element.find('.price').text() + '</span>' +
+										'</div>' +
+									'</div>' +
+								'</div>';
+					}
+
+					$(container)[0].innerHTML = cont;
+
+					$('body').append(container);
+					reCalcPopUpCoord();
+					var psC = new PerfectScrollbar('.cluster-popup-el',{
+						suppressScrollX: true,
+						wheelPropagation: false,
+					});
+
+				} else {
+					e.layer.zoomToBounds();
+				}
+			}
+
+		, this);
 
         map.addLayer(mapcluster);
         map.on('moveend', onMapMoveEnd);
@@ -1016,8 +1005,13 @@ function bindEventsToPopUpper(e) {
     }
 
     function getFeatures() {
-		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/box_copy.php', getMapParams(), { callbackParamName: 'callback' })
-			.then(gotPlots);
+		$.ajax({
+			url: "//www.homeads.ca/engine/box_copy.php",
+			jsonp: "callback",
+			dataType: "jsonp",
+			data: getMapParams(),
+			success: gotPlots
+		});
 	}
 
 	var listings = document.getElementById('listings');
@@ -1037,18 +1031,18 @@ function bindEventsToPopUpper(e) {
 				scrolled = window.pageYOffset || document.documentElement.scrollTop;
 			if (target.scrollTop + target.clientHeight > target.scrollHeight - 20) {
 				infiniteScroll.pagenum++;
-				var bounds = map.getBounds(),
-					minll = bounds.getSouthWest(),
-					maxll = bounds.getNorthEast();
+				// var bounds = map.getBounds(),
+					// minll = bounds.getSouthWest(),
+					// maxll = bounds.getNorthEast();
 				getBoxListings(infiniteScroll.pagenum);
 			}
 		}
 	}
 
     function getBoxListings(num) {
-		var bounds = map.getBounds(),
-			minll = bounds.getSouthWest(),
-			maxll = bounds.getNorthEast();
+		// var bounds = map.getBounds(),
+			// minll = bounds.getSouthWest(),
+			// maxll = bounds.getNorthEast();
 		if (!num) {
 			infiniteScroll.pagenum = num = 1;
 		}
@@ -1057,8 +1051,12 @@ function bindEventsToPopUpper(e) {
 		}, getMapParams());
 		listings.appendChild(infiniteScroll.listLoader);
 		
-		L.gmxUtil.requestJSONP('//www.homeads.ca/engine/boxlistings_copy.php', par, { callbackParamName: 'callback' })
-			.then(function(res) {
+		$.ajax({
+			url: "//www.homeads.ca/engine/boxlistings_copy.php",
+			jsonp: "callback",
+			dataType: "jsonp",
+			data: par,
+			success: function( res ) {
 				if (infiniteScroll.listLoader.parentNode) {
 					infiniteScroll.listLoader.parentNode.removeChild(infiniteScroll.listLoader);
 				}
@@ -1097,6 +1095,7 @@ function bindEventsToPopUpper(e) {
 					}
 					infiniteScroll.masonryCont.scrollTop += 1;
 				}
+			}
 		});
 	}
 
@@ -1202,6 +1201,74 @@ function bindEventsToPopUpper(e) {
         }
     }
 
+
+	function getPopUpper(markerData) {
+		var images = '';
+		if (markerData[6]) {
+			for (var i = 1; i <= markerData[6]; i++) {
+				images += '<div class="item"><img onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';" src="https://www.homeads.ca/img/' + markerData[0] + '_' + i + '.jpg"></div>';
+			}
+		} else images = '<div class="no-image"></div>';
+
+
+		return '<div class="info-popup">' +
+			'   <div class="for-type">' + markerData[8] + '</div>' +
+			'   <i class="mdi mdi-heart" data_house="' + markerData[0] + '" onclick="bookList(' + markerData[0] + ')"></i>' +
+			'   <div class="slider-wrapper owl-carousel d-flex align-items-center">' + images + '</div>' +
+			'   <div class="cont-wrap">' +
+			'       <div>' +
+			'           <span class="beds"><i class="mdi mdi-hotel"></i> ' + markerData[4] + '</span>' +
+			'           <span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + markerData[5] + '</span>' +
+			'       </div>' +
+			'       <h3 class="info-popup-title">' + markerData[7] + '</h3>' +
+			'       <div><span class="price">$' + markerData[3] + '</span></div>' +
+			'   </div>' +
+			'</div>';
+	}
+
+	function bindEventsToPopUpper(e) {
+
+		$('.leaflet-popup-close-button').on('click', function() {
+			$('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
+			return false;
+		});
+
+		if ( window.innerWidth < 550 ) {
+			$('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').addClass('hidden');
+		}
+		$('.cluster-popup-el').remove();
+		var element = $(e.target._popup._contentNode);
+
+		if (window.pageYOffset > 0) {
+			$('html, body').animate({scrollTop: 0}, 500);
+		};
+
+		element.find(".info-popup-title").on('click', function () {
+			openSuperBigPopoup(e.target.markerData[0]);
+		});
+
+		element.addClass("owl-done").find(".slider-wrapper").owlCarousel({
+			loop: false,
+			margin: 0,
+			nav: true,
+			responsive: {
+				0: {
+					items: 1
+				},
+				600: {
+					items: 1
+				},
+				1000: {
+					items: 1
+				}
+			},
+			navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"]
+		}).trigger('refresh.owl.carousel');
+
+		// map.setView(new L.LatLng(e.latlng.lat + 0.007, e.latlng.lng));
+
+	}
+
     function gotPlots(plotlist) {
 		var markersCurrent = plotlist.map(function(it) {
             var id = it[0],
@@ -1218,7 +1285,19 @@ function bindEventsToPopUpper(e) {
 						'<div class="triangle" id="' + it[0] + '"><strong>$' + it[3] + '</strong></div>'
 					})
 				});
-				var popup = getPopUpper(it);
+				var popup = L.popup()
+					.on('add ', function(ev) {
+						$.ajax({
+							url: "//www.homeads.ca/engine/box_single.php",
+							jsonp: "callback",
+							dataType: "jsonp",
+							data: {id: id},
+							success: function( res ) {
+								popup.setContent(getPopUpper(res[0]));
+							}
+						});
+					}, this);
+				// var popup = getPopUpper(it);
 				marker.suttonPopupElement = popup;
 				marker.markerData = it;
 				marker.bindPopup(popup);
@@ -1226,7 +1305,7 @@ function bindEventsToPopUpper(e) {
 			}
 			return marker;
 		});
-		mapcluster.clearLayers();
+		//mapcluster.clearLayers();
 		mapcluster.addLayers(markersCurrent);
     }
 

@@ -4406,3 +4406,7 @@ i.bath-icon img {
     transform: translate(19px, 0);
   }
 }
+
+.ps__rail-y {
+    left: inherit!important;
+}
