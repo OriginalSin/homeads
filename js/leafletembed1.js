@@ -898,54 +898,53 @@ if (listing_ID !== '') {
             }
         });
 
-        // mapcluster.on('clusterclick', onMapClusterClick);
         mapcluster.on('clusterclick', function (e) {
 				$('.cluster-popup-el').remove();
 				$('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
 
 				if (map._animateToZoom >= 15) {
 					map.setView(e.latlng, map.getZoom());
-					var ids = e.layer.getAllChildMarkers().map(function(it) {
-						return it.markerData[0];
-					});
-					return ids.join(', ');
-
 					var markers = e.layer.getAllChildMarkers(),
+						ids = markers.map(function(it) { return it.markerData[0]; }),
 						container = $('<div>', {class: 'cluster-popup-el'})
 						.data('claster-coords', e.latlng),
 						cont = '';
-
-					for (var i = 0; i < markers.length; i++) {
-						var element = $(markers[i].suttonPopupElement);
-
-						cont += '<div class="items d-flex" data_id="' + markers[i].markerData[0] + '">' +
+					$.ajax({
+						url: "//www.homeads.ca/engine/box_single.php",
+						jsonp: "callback",
+						dataType: "jsonp",
+						data: {id: ids.join(',')},
+						success: function( res ) {
+							cont = res.map(function(it) {
+								var id = it[0];
+								return '<div class="items d-flex" data_id="' + id + '">' +
 									'<div class="items-img-wrapper">' +
-										'<img  onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))" src="https://www.homeads.ca/img_thumbs/' + markers[i].markerData[0] + '_1.jpg" onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';">' +
-										'<i onclick="bookList($(this).attr(\'data_house\'))" class="mdi mdi-heart" data_house="' + markers[i].markerData[0] + '"></i>' +
-										'<div class="for-type">' + markers[i].markerData[8] + '</div>' +
+										'<img  onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))" src="https://www.homeads.ca/img_thumbs/' + id + '_1.jpg" onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';">' +
+										'<i onclick="bookList($(this).attr(\'data_house\'))" class="mdi mdi-heart" data_house="' + id + '"></i>' +
+										'<div class="for-type">' + it[8] + '</div>' +
 									'</div>' +
 									'<div class="items-content-wrapper d-flex flex-column">' +
-										'<h3 onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))">' + element.find('h3').text() + '</h3>' +
+										'<h3 onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))">' + it[7] + '</h3>' +
 										'<div class="d-flex">' +
-											'<span class="beds"><i class="mdi mdi-hotel"></i> ' + element.find('.beds').text() + '</span>' +
-											'<span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + element.find('.bath').text() + '</span>' +
+											'<span class="beds"><i class="mdi mdi-hotel"></i> ' + it[4] + '</span>' +
+											'<span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + it[5] + '</span>' +
 										'</div>' +
 										'<div>' +
-											'<span class="price">' + element.find('.price').text() + '</span>' +
+											'<span class="price">' + it[3] + '</span>' +
 										'</div>' +
 									'</div>' +
 								'</div>';
-					}
+							}).join('\n');
+							$(container)[0].innerHTML = cont;
 
-					$(container)[0].innerHTML = cont;
-
-					$('body').append(container);
-					reCalcPopUpCoord();
-					var psC = new PerfectScrollbar('.cluster-popup-el',{
-						suppressScrollX: true,
-						wheelPropagation: false,
+							$('body').append(container);
+							reCalcPopUpCoord();
+							var psC = new PerfectScrollbar('.cluster-popup-el',{
+								suppressScrollX: true,
+								wheelPropagation: false,
+							});
+						}
 					});
-
 				} else {
 					e.layer.zoomToBounds();
 				}
@@ -1031,18 +1030,12 @@ if (listing_ID !== '') {
 				scrolled = window.pageYOffset || document.documentElement.scrollTop;
 			if (target.scrollTop + target.clientHeight > target.scrollHeight - 20) {
 				infiniteScroll.pagenum++;
-				// var bounds = map.getBounds(),
-					// minll = bounds.getSouthWest(),
-					// maxll = bounds.getNorthEast();
 				getBoxListings(infiniteScroll.pagenum);
 			}
 		}
 	}
 
     function getBoxListings(num) {
-		// var bounds = map.getBounds(),
-			// minll = bounds.getSouthWest(),
-			// maxll = bounds.getNorthEast();
 		if (!num) {
 			infiniteScroll.pagenum = num = 1;
 		}
@@ -1061,11 +1054,11 @@ if (listing_ID !== '') {
 					infiniteScroll.listLoader.parentNode.removeChild(infiniteScroll.listLoader);
 				}
 				infiniteScroll.left_listings = res.left_listings || 0;
+				var masonryWrapper = $("#listings .masonry_cont");
 				if (res.html && res.html.length) {
 					$('.not_found').remove();
 
 					if (infiniteScroll.pagenum < 2) {
-						var masonryWrapper = $("#listings .masonry_cont");
 						masonryWrapper.children(".grid-item").remove();
 						res.html = res.html.join("");
 						masonryWrapper.html(res.html);
@@ -1085,15 +1078,14 @@ if (listing_ID !== '') {
 							it.parentNode.removeChild(it);
 						}
 					}
-
-					// if (res.html.length == 0) {
-						// $('.masonry_cont').append($('<div>', { class: 'not_found', text: 'Sorry, there are no listings to match your criteria. Please expand your criteria or move around the map to search in different location. Thank You.'}))
-					// }
-
-					if ( window.innerWidth > 430 ) {
-						reBrick();
-					}
-					infiniteScroll.masonryCont.scrollTop += 1;
+						if ( window.innerWidth > 430 ) {
+							reBrick();
+						}
+						infiniteScroll.masonryCont.scrollTop += 1;
+				}
+				if (infiniteScroll.pagenum < 2 && res.html.length == 0) {
+					masonryWrapper.html('');
+					$('.masonry_cont').append($('<div>', { class: 'not_found', text: 'Sorry, there are no listings to match your criteria. Please expand your criteria or move around the map to search in different location. Thank You.'}))
 				}
 			}
 		});
@@ -1150,57 +1142,6 @@ if (listing_ID !== '') {
 		}, 1100);	
 
     }
-
-    function onMapClusterClick(e) {
-
-        $('.cluster-popup-el').remove();
-        $('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
-
-        if (map._animateToZoom >= 15) {
-
-            map.setView(e.latlng, map.getZoom());
-
-            var markers = e.layer.getAllChildMarkers(),
-                container = $('<div>', {class: 'cluster-popup-el'})
-                .data('claster-coords', e.latlng),
-                cont = '';
-
-            for (var i = 0; i < markers.length; i++) {
-                var element = $(markers[i].suttonPopupElement);
-
-                cont += '<div class="items d-flex" data_id="' + markers[i].markerData[0] + '">' +
-                            '<div class="items-img-wrapper">' +
-                                '<img  onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))" src="https://www.homeads.ca/img_thumbs/' + markers[i].markerData[0] + '_1.jpg" onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';">' +
-                                '<i onclick="bookList($(this).attr(\'data_house\'))" class="mdi mdi-heart" data_house="' + markers[i].markerData[0] + '"></i>' +
-                                '<div class="for-type">' + markers[i].markerData[8] + '</div>' +
-                            '</div>' +
-                            '<div class="items-content-wrapper d-flex flex-column">' +
-                                '<h3 onclick="openSuperBigPopoup($(this).closest(\'[data_id]\').attr(\'data_id\'))">' + element.find('h3').text() + '</h3>' +
-                                '<div class="d-flex">' +
-                                    '<span class="beds"><i class="mdi mdi-hotel"></i> ' + element.find('.beds').text() + '</span>' +
-                                    '<span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + element.find('.bath').text() + '</span>' +
-                                '</div>' +
-                                '<div>' +
-                                    '<span class="price">' + element.find('.price').text() + '</span>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
-            }
-
-            $(container)[0].innerHTML = cont;
-
-            $('body').append(container);
-            reCalcPopUpCoord();
-            var psC = new PerfectScrollbar('.cluster-popup-el',{
-                suppressScrollX: true,
-                wheelPropagation: false,
-            });
-
-        } else {
-            e.layer.zoomToBounds();
-        }
-    }
-
 
 	function getPopUpper(markerData) {
 		var images = '';
@@ -1270,43 +1211,45 @@ if (listing_ID !== '') {
 	}
 
     function gotPlots(plotlist) {
-		var markersCurrent = plotlist.map(function(it) {
-            var id = it[0],
-				marker = markers[id];
-            if (!marker) {
-				marker = markers[id] = L.marker(L.latLng(it[1], it[2]), {
-					icon: new L.DivIcon({
-						className: 'tooltips',
-						iconAnchor: [43, 32],
-						shadowSize:   [0, 0],
-						shadowAnchor: [0, 0],
-						popupAnchor:  [3, 6],
-						html: '' +
-						'<div class="triangle" id="' + it[0] + '"><strong>$' + it[3] + '</strong></div>'
-					})
-				});
-				var popup = L.popup()
-					.on('add ', function(ev) {
-						$.ajax({
-							url: "//www.homeads.ca/engine/box_single.php",
-							jsonp: "callback",
-							dataType: "jsonp",
-							data: {id: id},
-							success: function( res ) {
-								popup.setContent(getPopUpper(res[0]));
-							}
-						});
-					}, this);
-				// var popup = getPopUpper(it);
-				marker.suttonPopupElement = popup;
-				marker.markerData = it;
-				marker.bindPopup(popup);
-				marker.on('click', bindEventsToPopUpper);
-			}
-			return marker;
-		});
-		//mapcluster.clearLayers();
-		mapcluster.addLayers(markersCurrent);
+		if(plotlist) {
+			var markersCurrent = plotlist.map(function(it) {
+				var id = it[0],
+					marker = markers[id];
+				if (!marker) {
+					marker = markers[id] = L.marker(L.latLng(it[1], it[2]), {
+						icon: new L.DivIcon({
+							className: 'tooltips',
+							iconAnchor: [43, 32],
+							shadowSize:   [0, 0],
+							shadowAnchor: [0, 0],
+							popupAnchor:  [3, 6],
+							html: '' +
+							'<div class="triangle" id="' + it[0] + '"><strong>$' + it[3] + '</strong></div>'
+						})
+					});
+					var popup = L.popup()
+						.on('add ', function(ev) {
+							$.ajax({
+								url: "//www.homeads.ca/engine/box_single.php",
+								jsonp: "callback",
+								dataType: "jsonp",
+								data: {id: id},
+								success: function( res ) {
+									popup.setContent(getPopUpper(res[0]));
+								}
+							});
+						}, this);
+					// var popup = getPopUpper(it);
+					marker.suttonPopupElement = popup;
+					marker.markerData = it;
+					marker.bindPopup(popup);
+					marker.on('click', bindEventsToPopUpper);
+				}
+				return marker;
+			});
+			//mapcluster.clearLayers();
+			mapcluster.addLayers(markersCurrent);
+		}
     }
 
     
