@@ -1206,7 +1206,7 @@ if (listing_ID !== '') {
 			navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"]
 		}).trigger('refresh.owl.carousel');
 
-		// map.setView(new L.LatLng(e.latlng.lat + 0.007, e.latlng.lng));
+		map.setView(new L.LatLng(e.latlng.lat + 0.007, e.latlng.lng));
 
 	}
 
