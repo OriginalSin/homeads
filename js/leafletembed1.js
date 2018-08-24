@@ -109,7 +109,7 @@ function openSuperBigPopoup (x) {
 
     $.ajax({
         type: "POST",
-        url: "http://www.homeads.ca/engine/popup.php",
+        url: "//www.homeads.ca/engine/popup.php",
         data: {
             'popupId': popupId,
         },
