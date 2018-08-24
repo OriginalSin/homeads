@@ -930,7 +930,7 @@ if (listing_ID !== '') {
 											'<span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + it[5] + '</span>' +
 										'</div>' +
 										'<div>' +
-											'<span class="price">' + it[3] + '</span>' +
+											'<span class="price">$' + it[3] + '</span>' +
 										'</div>' +
 									'</div>' +
 								'</div>';
