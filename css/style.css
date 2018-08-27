@@ -3942,7 +3942,7 @@ i.bath-icon img {
     }
 
     .masonry_cont {
-        height: auto!important;
+        /* height: auto!important; */
     }
 
     #listings .grid-item {
