@@ -1,5 +1,3 @@
-var proxy = '//maps.kosmosnimki.ru/ApiSave.ashx?WrapStyle=None&get=';
-
 var markers = {},
     mapcluster,
     userStorage = JSON.parse(localStorage.getItem('bookListId'));
