@@ -885,7 +885,14 @@ if (listing_ID !== '') {
 			mapbox = new L.TileLayer(mapboxUrl, {minZoom: 10, maxZoom: 15, attribution: mapboxAttrib});
         map.addLayer(mapbox);
 	*/
-         map.addLayer(osm);
+        map.addLayer(osm);
+
+		L.control.locate({
+			drawCircle: false,
+			strings: {
+				title: "Show me where I am, yo!"
+			}
+		}).addTo(map);
 
         mapcluster = L.markerClusterGroup({
             chunkedLoading: true,
