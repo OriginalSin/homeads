@@ -871,6 +871,7 @@ footer .footer-links-wrapper a:hover {
 }
 
 .masonry_cont {
+	/* height: 100% !important; */
     width: 100%!important;
     overflow-y: auto;
     overflow-x: hidden!important;
@@ -3767,7 +3768,7 @@ i.bath-icon img {
     }
 
     .masonry_cont {
-        overflow: inherit!important;
+        /* overflow: inherit!important; */
         min-height: 100vh;
     }
 
@@ -3942,7 +3943,7 @@ i.bath-icon img {
     }
 
     .masonry_cont {
-        /* height: auto!important; */
+        height: 100vh!important;
     }
 
     #listings .grid-item {

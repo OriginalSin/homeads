@@ -874,16 +874,18 @@ if (listing_ID !== '') {
 		});
         var osmUrl = 'https://www.homeads.ca/tiles.php?z={z}&x={x}&y={y}&r=mapnik';
 
-        // var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-        // var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 15, attribution: osmAttrib});
+         var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+         var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 15, attribution: osmAttrib});
 
-        // map.setView(new L.LatLng(lat, lon), zoom);
+         map.setView(new L.LatLng(lat, lon), zoom);
 
+        /*
         var mapboxUrl = '//api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29zbW9zbmlta2lydSIsImEiOiJjaWhxMHNlZDgwNGFldHBtMjdyejQ3YTJ3In0.3UAAWcIBabrbUhHwmp1WjA',
 			mapboxAttrib = '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a>';
 			mapbox = new L.TileLayer(mapboxUrl, {minZoom: 10, maxZoom: 15, attribution: mapboxAttrib});
         map.addLayer(mapbox);
-        // map.addLayer(osm);
+	*/
+         map.addLayer(osm);
 
         mapcluster = L.markerClusterGroup({
             chunkedLoading: true,
@@ -909,7 +911,7 @@ if (listing_ID !== '') {
 						cont = '';
 					$.ajax({
 						url: "//www.homeads.ca/engine/box_single.php",
-						jsonp: "callback",
+					jsonp: "callback",
 						dataType: "jsonp",
 						data: {id: ids.join(',')},
 						success: function( res ) {
@@ -972,41 +974,42 @@ if (listing_ID !== '') {
 			minll = bounds.getSouthWest(),
 			maxll = bounds.getNorthEast();
 		return {
-			w: minll.lng,
-			s: minll.lat,
-			e: maxll.lng,
-			n: maxll.lat,
-			'sortType':sortType,
-			'listing_price_from': listing_price_from,
-			'listing_price_to': listing_price_to,
-			'residential': $('input[name="residential"]').val(),
-			'homeType': $('input[name="home-type"]').val(),
-			'priceFrom': $('input[name="price-from"]').val(),
-			'priceTo': $('input[name="price-to"]').val(),
-			'rentFrom': $('input[name="rent-from"]').val(),
-			'rentTo': $('input[name="rent-to"]').val(),
-			'interioFrom': $('input[name="interio-from"]').val(),
-			'interioTo': $('input[name="interio-to"]').val(),
-			'dateD': $('#datepicker').val(),
-			'beds': $('input[name="beds"]').val(),
-			'bath': $('input[name="bath"]').val(),
-			'openHouseOnly': $('input[name="openHouseOnly"]').val(),
-			'waterfront': $('input[name="waterfront"]').val(),
-			'pool': $('input[name="pool"]').val(),
-			'fireplace': $('input[name="fireplace"]').val(),
-			'searchValue': searchValue,
-			'landType':  $('input[name="land-type"]').val(),
-		    'bstories': $('input[name="bstories"]').val(),
-		    'attachstyle': $('input[name="attachstyle"]').val()
+			get: '?w=' + minll.lng + '&s=' + minll.lat + '&e=' + maxll.lng + '&n=' + maxll.lat,
+			post: {
+				'sortType':sortType,
+				'listing_price_from': listing_price_from,
+				'listing_price_to': listing_price_to,
+				'residential': $('input[name="residential"]').val(),
+				'homeType': $('input[name="home-type"]').val(),
+				'priceFrom': $('input[name="price-from"]').val(),
+				'priceTo': $('input[name="price-to"]').val(),
+				'rentFrom': $('input[name="rent-from"]').val(),
+				'rentTo': $('input[name="rent-to"]').val(),
+				'interioFrom': $('input[name="interio-from"]').val(),
+				'interioTo': $('input[name="interio-to"]').val(),
+				'dateD': $('#datepicker').val(),
+				'beds': $('input[name="beds"]').val(),
+				'bath': $('input[name="bath"]').val(),
+				'openHouseOnly': $('input[name="openHouseOnly"]').val(),
+				'waterfront': $('input[name="waterfront"]').val(),
+				'pool': $('input[name="pool"]').val(),
+				'fireplace': $('input[name="fireplace"]').val(),
+				'searchValue': searchValue,
+				'landType':  $('input[name="land-type"]').val(),
+				'bstories': $('input[name="bstories"]').val(),
+				'attachstyle': $('input[name="attachstyle"]').val()
+			}
         };
     }
 
     function getFeatures() {
+        var pars = getMapParams();
 		$.ajax({
-			url: "//www.homeads.ca/engine/box_copy.php",
-			jsonp: "callback",
-			dataType: "jsonp",
-			data: getMapParams(),
+			type:"POST",
+			url: "//www.homeads.ca/engine/box.php" + pars.get,
+			//jsonp: "callback",
+			dataType: "json",
+			data: pars.post,
 			success: gotPlots
 		});
 	}
@@ -1037,16 +1040,15 @@ if (listing_ID !== '') {
 		if (!num) {
 			infiniteScroll.pagenum = num = 1;
 		}
-		var par = L.extend({
-			pageNum: num,
-		}, getMapParams());
+        var pars = getMapParams();
 		listings.appendChild(infiniteScroll.listLoader);
 		
 		$.ajax({
-			url: "//www.homeads.ca/engine/boxlistings_copy.php",
-			jsonp: "callback",
-			dataType: "jsonp",
-			data: par,
+			type:"POST",
+			url: "//www.homeads.ca/engine/boxlistings.php" + pars.get,
+			//jsonp: "callback",
+			dataType: "json",
+			data: L.extend({ pageNum: num }, pars.post),
 			success: function( res ) {
 				if (infiniteScroll.listLoader.parentNode) {
 					infiniteScroll.listLoader.parentNode.removeChild(infiniteScroll.listLoader);
@@ -1133,8 +1135,9 @@ if (listing_ID !== '') {
 				}
 		
 				$('.masonry_cont').css({
-				   paddingRight: '15px',
-				   overflow: 'hidden',
+				   paddingRight: '15px'
+				   // ,
+				   // overflow: 'hidden',
 				});
 				document.querySelector('.masonry_cont').scrollTop = 0;
 		}, 1100);	
@@ -1229,8 +1232,9 @@ if (listing_ID !== '') {
 						.on('add ', function(ev) {
 							$.ajax({
 								url: "//www.homeads.ca/engine/box_single.php",
+						jsonp: "callback",
 								jsonp: "callback",
-								dataType: "jsonp",
+								dataType: "json",
 								data: {id: id},
 								success: function( res ) {
 									popup.setContent(getPopUpper(res[0]));
