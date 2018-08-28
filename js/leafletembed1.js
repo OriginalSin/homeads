@@ -1168,7 +1168,7 @@ if (listing_ID !== '') {
 			'           <span class="beds"><i class="mdi mdi-hotel"></i> ' + markerData[4] + '</span>' +
 			'           <span class="bath"><i class="bath-icon"><img src="./images/Bathtub-512.jpg" alt=""></i> ' + markerData[5] + '</span>' +
 			'       </div>' +
-			'       <h3 class="info-popup-title">' + markerData[7] + '</h3>' +
+			'       <h3 class="info-popup-title" onclick="openSuperBigPopoup('+ markerData[0] + ');">' + markerData[7] + '</h3>' +
 			'       <div><span class="price">$' + markerData[3] + '</span></div>' +
 			'   </div>' +
 			'</div>';
