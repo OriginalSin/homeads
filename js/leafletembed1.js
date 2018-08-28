@@ -1045,10 +1045,9 @@ if (listing_ID !== '') {
 		
 		$.ajax({
 			type:"POST",
-			url: "//www.homeads.ca/engine/boxlistings.php" + pars.get,
-			//jsonp: "callback",
+			url: "//www.homeads.ca/engine/boxlistings.php" + pars.get + '&pageNum=' + num,
 			dataType: "json",
-			data: L.extend({ pageNum: num }, pars.post),
+			data: pars.post,
 			success: function( res ) {
 				if (infiniteScroll.listLoader.parentNode) {
 					infiniteScroll.listLoader.parentNode.removeChild(infiniteScroll.listLoader);
