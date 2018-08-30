@@ -1,4 +1,5 @@
 var markers = {},
+    skipMoveEnd = false,
     mapcluster,
     userStorage = JSON.parse(localStorage.getItem('bookListId'));
     bookListId = userStorage || [],
@@ -875,7 +876,7 @@ if (listing_ID !== '') {
         var osmUrl = 'https://www.homeads.ca/tiles.php?z={z}&x={x}&y={y}&r=mapnik';
 
          var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-         var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 15, attribution: osmAttrib});
+         var osm = new L.TileLayer(osmUrl, {minZoom: 10, maxZoom: 17, attribution: osmAttrib});
 
          map.setView(new L.LatLng(lat, lon), zoom);
 
@@ -909,8 +910,10 @@ if (listing_ID !== '') {
 				$('.cluster-popup-el').remove();
 				$('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
 
-				if (map._animateToZoom >= 15) {
-					map.setView(e.latlng, map.getZoom());
+				if (map.getZoom() >= 15) {
+				// if (map._animateToZoom >= 15) {
+skipMoveEnd = true;
+					// map.setView(e.latlng, map.getZoom());
 					var markers = e.layer.getAllChildMarkers(),
 						ids = markers.map(function(it) { return it.markerData[0]; }),
 						container = $('<div>', {class: 'cluster-popup-el'})
@@ -919,7 +922,8 @@ if (listing_ID !== '') {
 					$.ajax({
 						url: "//www.homeads.ca/engine/box_single.php",
 					jsonp: "callback",
-						dataType: "jsonp",
+					dataType: "jsonp",
+						// dataType: "json",
 						data: {id: ids.join(',')},
 						success: function( res ) {
 							cont = res.map(function(it) {
@@ -941,8 +945,8 @@ if (listing_ID !== '') {
 										'</div>' +
 									'</div>' +
 								'</div>';
-							}).join('\n');
-							$(container)[0].innerHTML = cont;
+							});
+							$(container)[0].innerHTML = cont.join('\n');
 
 							$('body').append(container);
 							reCalcPopUpCoord();
@@ -952,9 +956,9 @@ if (listing_ID !== '') {
 							});
 						}
 					});
-				} else {
-					e.layer.zoomToBounds();
 				}
+				// } else {
+				e.layer.zoomToBounds();
 			}
 
 		, this);
@@ -1123,37 +1127,39 @@ if (listing_ID !== '') {
     }
 
     function onMapMoveEnd(e) {
-
-       // cancel any timeout currently running
-		window.clearTimeout(timeoutHandler);
-	// create new timeout to fire sesarch function after 500ms (or whatever you like)
-		timeoutHandler = window.setTimeout(function() {
-				askForPlots();
-				if (window.pageYOffset > 0) {
-					$('html, body').animate({scrollTop: 0}, 500);
-				}
-		
-				if ($('#listings .content').length !== 0) {
-					$('#listings .content').remove();
-					var headerHeight = $('header').outerHeight(),
-						listContent = $('#listings .content').height() || 0;
-					$('.masonry_cont_wrapper').height($(window).innerHeight() - headerHeight - listContent + 'px');
-				}
-		
-				$('.masonry_cont').css({
-				   paddingRight: '15px'
-				   // ,
-				   // overflow: 'hidden',
-				});
-				document.querySelector('.masonry_cont').scrollTop = 0;
-		}, 1100);	
-
+		if(!skipMoveEnd) {
+		   // cancel any timeout currently running
+			window.clearTimeout(timeoutHandler);
+		// create new timeout to fire sesarch function after 500ms (or whatever you like)
+			timeoutHandler = window.setTimeout(function() {
+					askForPlots();
+					if (window.pageYOffset > 0) {
+						$('html, body').animate({scrollTop: 0}, 500);
+					}
+			
+					if ($('#listings .content').length !== 0) {
+						$('#listings .content').remove();
+						var headerHeight = $('header').outerHeight(),
+							listContent = $('#listings .content').height() || 0;
+						$('.masonry_cont_wrapper').height($(window).innerHeight() - headerHeight - listContent + 'px');
+					}
+			
+					$('.masonry_cont').css({
+					   paddingRight: '15px'
+					   // ,
+					   // overflow: 'hidden',
+					});
+					document.querySelector('.masonry_cont').scrollTop = 0;
+			}, 1100);	
+		}
+		skipMoveEnd = false;
     }
 
 	function getPopUpper(markerData) {
 		var images = '';
 		if (markerData[6]) {
-			for (var i = 1; i <= markerData[6]; i++) {
+			for (var i = 1; i <= 1; i++) {
+			// for (var i = 1; i <= markerData[6]; i++) {
 				images += '<div class="item"><img onerror="this.onerror=null;this.src=\'/src/img/no-image.svg\';" src="https://www.homeads.ca/img/' + markerData[0] + '_' + i + '.jpg"></div>';
 			}
 		} else images = '<div class="no-image"></div>';
@@ -1162,7 +1168,7 @@ if (listing_ID !== '') {
 		return '<div class="info-popup">' +
 			'   <div class="for-type">' + markerData[8] + '</div>' +
 			'   <i class="mdi mdi-heart" data_house="' + markerData[0] + '" onclick="bookList(' + markerData[0] + ')"></i>' +
-			'   <div class="slider-wrapper owl-carousel d-flex align-items-center">' + images + '</div>' +
+			'   <div class="slider-wrapper owl-carousel d-flex align-items-center" onclick="openSuperBigPopoup('+ markerData[0] + ');">' + images + '</div>' +
 			'   <div class="cont-wrap">' +
 			'       <div>' +
 			'           <span class="beds"><i class="mdi mdi-hotel"></i> ' + markerData[4] + '</span>' +
@@ -1213,7 +1219,7 @@ if (listing_ID !== '') {
 			navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"]
 		}).trigger('refresh.owl.carousel');
 
-		map.setView(new L.LatLng(e.latlng.lat + 0.007, e.latlng.lng));
+		// map.setView(new L.LatLng(e.latlng.lat + 0.007, e.latlng.lng));
 
 	}
 
@@ -1235,12 +1241,13 @@ if (listing_ID !== '') {
 						})
 					});
 					var popup = L.popup()
-						.on('add ', function(ev) {
+						.on('add', function(ev) {
+skipMoveEnd = true;
 							$.ajax({
 								url: "//www.homeads.ca/engine/box_single.php",
-						jsonp: "callback",
-								jsonp: "callback",
-								dataType: "json",
+					jsonp: "callback",
+					dataType: "jsonp",
+						// dataType: "json",
 								data: {id: id},
 								success: function( res ) {
 									popup.setContent(getPopUpper(res[0]));
