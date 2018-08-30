@@ -970,7 +970,7 @@ skipMoveEnd = true;
             $(".cluster-popup-el").remove();
             $('.filter-type-wrapper, .map-regime-controller, .leaflet-control-zoom').removeClass('hidden');
         });
-		// map.getContainer().style.position = 'fixed';
+		map.getContainer().style.position = 'fixed';
 
         askForPlots();
 
