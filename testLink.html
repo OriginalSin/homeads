@@ -9,19 +9,24 @@
     <title>Innisfil Real Estate for Sale</title>
 
     <script src="./testLink.js"></script>
-
+	<style>
+		li {
+			cursor: pointer;
+			margin-top: 20px;
+		}
+	</style>
 
 </head>
 <body>
 
 	<ul>
 		<li class="link1">test1</li>
-		<li class="link2">test1</li>
+		<li class="link2">test2</li>
 	</ul>
     <script>
 		var linkHides = {
-			link1: {listing-id: 19772816},
-			link2: {listing-id: 19590290}
+			link1: {'listing-id': 19772816},
+			link2: {'listing-id': 19590290}
 		};
 		setTimeout(function() {
 			hideLinks(linkHides);
