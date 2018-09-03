@@ -3,7 +3,8 @@ var prefix = 'https://www.homeads.ca/bradford-west-gwillimbury-real-estate',
 
 function setEvent(node, st) {
 	node.addEventListener('click', function() {
-		location.href = st;
+		console.log(st);
+		//location.href = st;
 	}.bind(this));
 }
 
