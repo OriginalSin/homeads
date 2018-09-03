@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- <base href="http://www.homeads.ca/page.html"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Search properties for sale in Innisfil. Innisfil is a rapidly developing community located only 80 min away from downtown Toronto. It has historically been a rural area, but growth in the Barrie area and the Greater Toronto Area has meant greater residential development in Innisfil , which still continues to develop and grow. Innisfil offers a variety of all-season outdoor activities., schools, shops, restaurants ,beaches and much more.">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Innisfil Real Estate for Sale</title>
+
+    <link rel="stylesheet" href="//www.homeads.ca/src/css/custom-grid.css">
+    <link rel="stylesheet" href="//www.homeads.ca/src/css/reset.css">
+    <!--libs-->
+    <link rel="stylesheet" href="./materialdesignicons.min.css" media="all" type="text/css"/>
+    <link rel="stylesheet" href="//www.homeads.ca/src/css/MarkerCluster.css"/>
+    <link rel="stylesheet" href="//www.homeads.ca/src/css/MarkerCluster.Default.css"/>
+    <link rel="stylesheet" href="//www.homeads.ca/src/libs/rrssb-master/css/rrssb.css">
+    <link rel="stylesheet" href="//www.homeads.ca/src/libs/perfect-scrollbar-master/css/perfect-scrollbar.css">
+    <!--fonts-->
+    <link rel="stylesheet" href="//www.homeads.ca/src/fonts/font.css">
+    <!--Main css file-->
+    <link rel="stylesheet" href="./css/style.css">
+
+    <script src="//www.homeads.ca/src/libs/jQuery/jquery.min.js"></script>
+
+	<!-- <link rel="stylesheet" href="./libs/geomixer/geomixer.css" crossorigin=""/> -->
+	<!-- <script src="./libs/geomixer/geomixer-src.js?1508146119421" crossorigin=""></script> -->
+
+    <script src="//www.homeads.ca/src/libs/leaflet/leaflet-src.js"></script>
+    <link rel="stylesheet" href="//www.homeads.ca/src/libs/leaflet/leaflet.css">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="./js/locatecontrol/L.Control.Locate.js"></script>
+    <link href="./js/locatecontrol/L.Control.Locate.min.css" rel="stylesheet">
+
+    <script type="text/javascript" src="//www.homeads.ca/src/libs/leaflet/leaflet.markercluster.js"></script>
+
+
+</head>
+<body>
+
+    <header class="d-flex show-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-100 d-flex">
+                    <div class="logo_wrapper">
+                        <a href="https://www.homeads.ca">
+                            <img src="//www.homeads.ca/src/img/sutton-logo.png" alt="Logo">
+                        </a>
+                    </div>
+                    <div class="d-flex justify-content-center justify-content-center main_nav-wrapper">
+                        <span class="menu-closer align-items-center"><i class="mdi mdi-close-box-outline"></i></span>
+                        <div class="menu-wrapper main-nav-wr d-flex align-items-center justify-content-center">
+                            <ul class="menu-lists d-flex flex-column align-items-start justify-content-center align-items-lg-stretch">
+                                <li class="d-flex flex-column justify-content-center have-sub-menu">
+                                    <span class="d-inline-flex align-items-center flex-nowrap">Buy</span>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.homeads.ca/property-search">Property Search</a></li>
+                                        <li><a href="https://www.homeads.ca/first-time-home-buyers">First-Time Home Buyers</a></li>
+	                                <li><a href="https://www.homeads.ca/new_listings_notification">New Listings Notification</a></li>
+                                        <li><a href="https://www.homeads.ca/houses-with-pools">Homes with Swimming Pools</a></li>
+                                        <li><a href="https://www.homeads.ca/waterfront-properties">Waterfront</a></li>
+                                        <li><a href="https://www.homeads.ca/condo-for-sale">Condo</a></li>
+                                        <li><a href="https://www.homeads.ca/bungalows-for-sale">Bungalows</a></li>
+                                        <li><a href="https://www.homeads.ca/detached-houses-for-sale">Detached</a></li>
+                                        <li><a href="https://www.homeads.ca/semi-detached-houses-for-sale">Semidetached</a></li>
+                                        <li><a href="https://www.homeads.ca/townhouses-for-sale">Townhouses</a></li>
+                                        <li><a href="https://www.homeads.ca/homes-from-10000-to-300000">Homes $10000 - $300000 range</a></li>
+                                        <li><a href="https://www.homeads.ca/homes-from-300000-to-500000">Homes $300000 - $500000 range</a></li>
+                                        <li><a href="https://www.homeads.ca/homes-from-500000-and-up">Homes $500000 - up</a></li>
+                                        <li><a href="https://www.homeads.ca/industrial-properties-for-sale">Industrial</a></li>
+                                        <li><a href="https://www.homeads.ca/office-properties-for-sale">Office</a></li>
+                                        <li><a href="https://www.homeads.ca/business-for-sale">Business For Sale</a></li>
+                                        <li><a href="https://www.homeads.ca/vacant-land">Vacant Lots</a></li>
+                                    </ul>
+                                </li>
+                                <li class="d-flex flex-column justify-content-center have-sub-menu">
+                                    <span class="d-inline-flex align-items-center flex-nowrap">Sell</span>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.homeads.ca/free-home-evaluation">Free Home Evaluation</a></li>
+                                        <li><a href="https://www.homeads.ca/why-sell-with-us">Why Choose Us</a></li>
+                                    </ul>
+                                </li>
+                                <li class="d-flex flex-column justify-content-center have-sub-menu"><a class="d-flex flex-nowrap" href="https://www.homeads.ca/relocation-support"><span class="d-inline-flex align-items-center flex-nowrap">Relocation Support</span></a></li>
+                                <li class="d-flex flex-column justify-content-center have-sub-menu">
+                                    <span class="d-inline-flex align-items-center flex-nowrap">Communities</span>
+                                    <ul class="sub-menu">
+					<li><a href="https://www.homeads.ca/adjala-tosorontio-community">Adjala-Tosorontio</a></li><li><a href="https://www.homeads.ca/aurora-community">Aurora</a></li><li><a href="https://www.homeads.ca/barrie-community">Barrie</a></li><li><a href="https://www.homeads.ca/bradford-west-gwillimbury-community">Bradford West Gwillimbury</a></li><li><a href="https://www.homeads.ca/clearview-community">Clearview</a></li><li><a href="https://www.homeads.ca/collingwood-community">Collingwood</a></li><li><a href="https://www.homeads.ca/essa-community">Essa</a></li><li><a href="https://www.homeads.ca/huntsville-community">Huntsville</a></li><li><a href="https://www.homeads.ca/innisfil-community">Innisfil</a></li><li><a href="https://www.homeads.ca/midland-community">Midland</a></li><li><a href="https://www.homeads.ca/new-tecumseth-community">New Tecumseth</a></li><li><a href="https://www.homeads.ca/newmarket-community">Newmarket</a></li><li><a href="https://www.homeads.ca/orillia-community">Orillia</a></li><li><a href="https://www.homeads.ca/oro-medonte-community">Oro-Medonte</a></li><li><a href="https://www.homeads.ca/penetanguishene-community">Penetanguishene</a></li><li><a href="https://www.homeads.ca/ramara-community">Ramara</a></li><li><a href="https://www.homeads.ca/severn-community">Severn</a></li><li><a href="https://www.homeads.ca/springwater-community">Springwater</a></li><li><a href="https://www.homeads.ca/tay-community">Tay</a></li><li><a href="https://www.homeads.ca/tiny-community">Tiny</a></li><li><a href="https://www.homeads.ca/wasaga-beach-community">Wasaga Beach</a></li>
+                                    </ul>
+                                </li>
+                                <li class="d-flex flex-column justify-content-center have-sub-menu">
+                                    <span class="d-inline-flex align-items-center flex-nowrap">Blog</span>
+                                    <ul class="sub-menu">
+					<li><a href="https://www.homeads.ca/blog/cottage-buying-tips-i2">Cottage Buying Tips</a></li><li><a href="https://www.homeads.ca/blog/curb-appeal-i5">Curb Appeal</a></li><li><a href="https://www.homeads.ca/blog/first-time-home-buyers-i6">First Time Home Buyers</a></li><li><a href="https://www.homeads.ca/blog/friday-harbour-i3">Friday Harbour</a></li><li><a href="https://www.homeads.ca/blog/home-staging-101-i4">Home Staging 101</a></li><li><a href="https://www.homeads.ca/blog/innisfil-for-every-taste-and-lifestyle-i1">Innisfil - for every taste and lifestyle! </a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="menu-wrapper contacts-wr  justify-content-center d-flex align-items-center">
+                            <ul class="menu-lists menu-lists-last d-flex flex-column">
+                                <li class="d-flex align-items-center"><a class="d-flex flex-nowrap" href="tel:647-896-7668"><i class="mdi mdi-phone-classic"></i><span>647-896-7668</span></a></li>
+                                <li class="d-flex align-items-center"><a class="d-flex flex-nowrap" href="mailto:ds@homeads.ca"><i class="mdi mdi-email"></i><span>ds@homeads.ca</span></a></li>
+                                <li class="d-flex align-items-center"><a class="d-flex flex-nowrap" href="mailto:ds@homeads.ca"><i class="mdi mdi-email"></i><span>Darya Strilyana</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <span class="menu-button align-items-center"><i class="mdi mdi-menu"></i></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div>
+        <div class="filter-options justify-content-center">
+            <i class="filter-closer mdi mdi-close-box-outline"></i>
+
+            <div class="filter-items-wrap justify-content-center d-flex flex-wrap">
+                <div class="custom-select residential-wrapper">
+                    <input type="hidden" name="residential" value="0">
+                    <ul class="option">
+                        <li data-val="0">Residential</li>
+			<li data-val="12">Condo/Strata</li>
+                        <li data-val="1">Agriculture</li>
+                        <li data-val="2">Business</li>
+                        <li data-val="3">Hospitality</li>
+                        <li data-val="4">Industrial</li>
+                        <li data-val="5">Institutional</li>
+                        <li data-val="6">Office</li>
+                        <li data-val="7">Other</li>
+                        <li data-val="8">Parking</li>
+                        <li data-val="9">Recreational</li>
+                        <li data-val="10">Retail</li>
+                        <li data-val="11">Vacant Land</li>
+                    </ul>
+                    <div class="controller residential" style="text-align:center;"><span>Type</span></div>
+                </div>
+
+                <div class="custom-select sale-type-wrapper">
+                    <input type="hidden" name="home-type" value="1">
+                    <ul class="option">
+                        <li data-val="1">For sale</li>
+                        <li data-val="2">For rent</li>
+                    </ul>
+                    <div class="controller"><span>For sale</span></div>
+                </div>
+
+                <div class="custom-select min-price">
+                    <input type="hidden" name="price-from" value="1">
+                    <ul class="option">
+                        <li data-val="0">$0</li>
+                        <li data-val="25000">$25,000</li>
+                        <li data-val="50000">$50,000</li>
+                        <li data-val="75000">$75,000</li>
+                        <li data-val="100000">$100,000</li>
+                        <li data-val="125000">$125,000</li>
+                        <li data-val="150000">$150,000</li>
+                        <li data-val="175000">$175,000</li>
+                        <li data-val="200000">$200,000</li>
+                        <li data-val="225000">$225,000</li>
+                        <li data-val="250000">$250,000</li>
+                        <li data-val="275000">$275,000</li>
+                        <li data-val="300000">$300,000</li>
+                        <li data-val="325000">$325,000</li>
+                        <li data-val="350000">$350,000</li>
+                        <li data-val="375000">$375,000</li>
+                        <li data-val="400000">$400,000</li>
+                        <li data-val="425000">$425,000</li>
+                        <li data-val="450000">$450,000</li>
+                        <li data-val="475000">$475,000</li>
+                        <li data-val="500000">$500,000</li>
+                        <li data-val="550000">$550,000</li>
+                        <li data-val="600000">$600,000</li>
+                        <li data-val="650000">$650,000</li>
+                        <li data-val="700000">$700,000</li>
+                        <li data-val="750000">$750,000</li>
+                        <li data-val="800000">$800,000</li>
+                        <li data-val="850000">$850,000</li>
+                        <li data-val="900000">$900,000</li>
+                        <li data-val="1000000">$1,000,000</li>
+                        <li data-val="1100000">$1,100,000</li>
+                        <li data-val="1200000">$1,200,000</li>
+                        <li data-val="1300000">$1,300,000</li>
+                        <li data-val="1400000">$1,400,000</li>
+                        <li data-val="1500000">$1,500,000</li>
+                        <li data-val="1600000">$1,600,000</li>
+                        <li data-val="1700000">$1,700,000</li>
+                        <li data-val="1800000">$1,800,000</li>
+                        <li data-val="1900000">$1,900,000</li>
+                        <li data-val="2000000">$2,000,000</li>
+                        <li data-val="2250000">$2,250,000</li>
+                        <li data-val="2500000">$2,500,000</li>
+                        <li data-val="2750000">$2,750,000</li>
+                        <li data-val="3000000">$3,000,000</li>
+                        <li data-val="3500000">$3,500,000</li>
+                        <li data-val="4000000">$4,000,000</li>
+                        <li data-val="4500000">$4,500,000</li>
+                        <li data-val="5000000">$5,000,000</li>
+                        <li data-val="6000000">$6,000,000</li>
+                        <li data-val="7000000">$7,000,000</li>
+                        <li data-val="8000000">$8,00,0000</li>
+                        <li data-val="9000000">$9,00,0000</li>
+                        <li data-val="1000000">$10,00,0000</li>
+                    </ul>
+                    <div class="controller">Price from: <span>$0</span></div>
+                </div>
+
+                <div class="custom-select max-price">
+                    <input type="hidden" name="price-to" value="1">
+                    <ul class="option">
+                        <li data-val="0">Unlimited</li>
+                        <li data-val="25000">$25,000</li>
+                        <li data-val="50000">$50,000</li>
+                        <li data-val="75000">$75,000</li>
+                        <li data-val="100000">$100,000</li>
+                        <li data-val="125000">$125,000</li>
+                        <li data-val="150000">$150,000</li>
+                        <li data-val="175000">$175,000</li>
+                        <li data-val="200000">$200,000</li>
+                        <li data-val="225000">$225,000</li>
+                        <li data-val="250000">$250,000</li>
+                        <li data-val="275000">$275,000</li>
+                        <li data-val="300000">$300,000</li>
+                        <li data-val="325000">$325,000</li>
+                        <li data-val="350000">$350,000</li>
+                        <li data-val="375000">$375,000</li>
+                        <li data-val="400000">$400,000</li>
+                        <li data-val="425000">$425,000</li>
+                        <li data-val="450000">$450,000</li>
+                        <li data-val="475000">$475,000</li>
+                        <li data-val="500000">$500,000</li>
+                        <li data-val="550000">$550,000</li>
+                        <li data-val="600000">$600,000</li>
+                        <li data-val="650000">$650,000</li>
+                        <li data-val="700000">$700,000</li>
+                        <li data-val="750000">$750,000</li>
+                        <li data-val="800000">$800,000</li>
+                        <li data-val="850000">$850,000</li>
+                        <li data-val="900000">$900,000</li>
+                        <li data-val="1000000">$1,000,000</li>
+                        <li data-val="1100000">$1,100,000</li>
+                        <li data-val="1200000">$1,200,000</li>
+                        <li data-val="1300000">$1,300,000</li>
+                        <li data-val="1400000">$1,400,000</li>
+                        <li data-val="1500000">$1,500,000</li>
+                        <li data-val="1600000">$1,600,000</li>
+                        <li data-val="1700000">$1,700,000</li>
+                        <li data-val="1800000">$1,800,000</li>
+                        <li data-val="1900000">$1,900,000</li>
+                        <li data-val="2000000">$2,000,000</li>
+                        <li data-val="2250000">$2,250,000</li>
+                        <li data-val="2500000">$2,500,000</li>
+                        <li data-val="2750000">$2,750,000</li>
+                        <li data-val="3000000">$3,000,000</li>
+                        <li data-val="3500000">$3,500,000</li>
+                        <li data-val="4000000">$4,000,000</li>
+                        <li data-val="4500000">$4,500,000</li>
+                        <li data-val="5000000">$5,000,000</li>
+                        <li data-val="6000000">$6,000,000</li>
+                        <li data-val="7000000">$7,000,000</li>
+                        <li data-val="8000000">$8,00,0000</li>
+                        <li data-val="9000000">$9,00,0000</li>
+                        <li data-val="1000000">$10,00,0000</li>
+                    </ul>
+                    <div class="controller">Price to: <span>Unlimited</span></div>
+                </div>
+
+                <div class="custom-select min-rent hidden">
+                    <input type="hidden" name="rent-from" value="0">
+                    <ul class="option">
+                        <li data-val="0">$0</li>
+                        <li data-val="100">$100</li>
+                        <li data-val="200">$200</li>
+                        <li data-val="300">$300</li>
+                        <li data-val="400">$400</li>
+                        <li data-val="500">$500</li>
+                        <li data-val="600">$600</li>
+                        <li data-val="700">$700</li>
+                        <li data-val="800">$800</li>
+                        <li data-val="900">$900</li>
+                        <li data-val="1000">$1000</li>
+                        <li data-val="1200">$1200</li>
+                        <li data-val="1400">$1400</li>
+                        <li data-val="1600">$1600</li>
+                        <li data-val="1800">$1800</li>
+                        <li data-val="2000">$2000</li>
+                        <li data-val="2500">$2500</li>
+                        <li data-val="3000">$3000</li>
+                    </ul>
+                    <div class="controller">Rent from: <span>$0</span></div>
+                </div>
+
+                <div class="custom-select max-rent hidden">
+                    <input type="hidden" name="rent-to" value="0">
+                    <ul class="option">
+                        <li data-val="0">Unlimited</li>
+                        <li data-val="100">$100</li>
+                        <li data-val="200">$200</li>
+                        <li data-val="300">$300</li>
+                        <li data-val="400">$400</li>
+                        <li data-val="500">$500</li>
+                        <li data-val="600">$600</li>
+                        <li data-val="700">$700</li>
+                        <li data-val="800">$800</li>
+                        <li data-val="900">$900</li>
+                        <li data-val="1000">$1000</li>
+                        <li data-val="1200">$1200</li>
+                        <li data-val="1400">$1400</li>
+                        <li data-val="1600">$1600</li>
+                        <li data-val="1800">$1800</li>
+                        <li data-val="2000">$2000</li>
+                        <li data-val="2500">$2500</li>
+                        <li data-val="3000">$3000</li>
+                    </ul>
+                    <div class="controller">Rent to: <span>Unlimited</span></div>
+                </div>
+
+                <div class="custom-select land-type-wrapper">
+                    <input type="hidden" name="bstories" value="0">
+                    <ul class="option">
+			<li data-val="0">All</li>
+			<li data-val="1">1</li>
+			<li data-val="2">1+</li>
+			<li data-val="3">2</li>
+			<li data-val="4">2+</li>
+			<li data-val="5">3</li>
+			<li data-val="6">3+</li>
+			<li data-val="7">4</li>
+			<li data-val="8">4+</li>
+			<li data-val="9">5</li>
+			<li data-val="10">5+</li>
+
+                    </ul>                        
+                    <div class="controller"><span>Storeys</span> <i class="mdi mdi-arrow-up-bold-hexagon-outline"></i></div>
+                </div>
+
+                <div class="custom-select land-type-wrapper">
+                    <input type="hidden" name="attachstyle" value="0">
+                    <ul class="option">
+			<li data-val="0">All</li>
+			<li data-val="1">Detached</li>
+			<li data-val="2">Semi-detached</li>
+			<li data-val="3">Attached</li>
+			<li data-val="4">Link</li>
+                    </ul>
+                    <div class="controller" style="width:163px;text-align:center;"><span>Style</span> <i class="mdi mdi-home-variant"></i></div>
+                </div>
+
+
+                <div class="custom-select land-type-wrapper">
+                    <input type="hidden" name="land-type" value="0">
+                    <ul class="option">
+			<li data-val="0">All</li>
+			<li data-val="1">Freehold</li>
+			<li data-val="2">Leasehold</li>
+			<li data-val="3">Condo/Strata</li>
+			<li data-val="4">Timeshare</li>
+                    </ul>
+                    <div class="controller" style="width:143px;text-align:center;"><span>Land Type</span></div>
+                </div>
+
+                <!--
+            <div class="custom-select min-interio">
+                <input type="hidden" name="interio-from" value="0">
+                <ul class="option">
+                    <li data-val="0">0</li>
+                    <li data-val="25">25</li>
+                    <li data-val="50">50</li>
+                    <li data-val="75">75</li>
+                    <li data-val="100">100</li>
+                    <li data-val="125">125</li>
+                </ul>
+                <div class="controller">Interior size min: <span>0</span></div>
+            </div>
+
+            <div class="custom-select max-interio">
+                <input type="hidden" name="interio-to" value="0">
+                <ul class="option">
+                    <li data-val="0">Unlimited</li>
+                    <li data-val="25">25</li>
+                    <li data-val="50">50</li>
+                    <li data-val="75">75</li>
+                    <li data-val="100">100</li>
+                    <li data-val="125">125</li>
+                </ul>
+                <div class="controller">Interior size max: <span>Unlimited</span></div>
+            </div>
+            -->
+
+
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Search...">
+                </div>
+
+                <div class="datepicker d-flex align-items-center">
+                    <p>Listed Since</p>
+                    <div class="inp-wrapper">
+                        <input type="text" id="datepicker"></p>
+                    </div>
+                    <i class="mdi mdi-close-box-outline"></i>
+                </div>
+
+                <div class="custom-select x">
+                    <input type="hidden" name="beds" value="0">
+                    <ul class="option">
+                        <li data-val="0">Any</li>
+                        <li data-val="1">1</li>
+                        <li data-val="2">2</li>
+                        <li data-val="3">3</li>
+                    </ul>
+                    <div class="controller"><span>Any</span> <i class="mdi mdi-hotel"></i></div>
+                </div>
+
+                <div class="custom-select x">
+                    <input type="hidden" name="bath" value="0">
+                    <ul class="option">
+                        <li data-val="0">Any</li>
+                        <li data-val="1">1</li>
+                        <li data-val="2">2</li>
+                        <li data-val="3">3</li>
+                    </ul>
+                    <div class="controller"><span>Any</span><i class="bath-icon"> <img src="./images/Bathtub-512-black.jpg" alt=""></i></div>
+                </div>
+                <!--
+            <div class="custom-checkbox d-flex align-items-center">
+                <input type="hidden" value="false" name="openHouseOnly">
+                <div class="d-flex align-items-center">
+                    <div class="item-body"></div>
+                    <p>- Open houses only</p>
+                </div>
+            </div>
+            -->
+                <div class="more-option">
+                    <div class="more-option-items">
+                        <div class="custom-checkbox d-flex align-items-center">
+                            <input type="hidden" value="false" name="waterfront">
+                            <div class="d-flex align-items-center">
+                                <div class="item-body"></div>
+                                <p>- Waterfront</p>
+                            </div>
+                        </div>
+
+                        <div class="custom-checkbox d-flex align-items-center">
+                            <input type="hidden" value="false" name="pool">
+                            <div class="d-flex align-items-center">
+                                <div class="item-body"></div>
+                                <p>- Pool</p>
+                            </div>
+                        </div>
+
+                        <div class="custom-checkbox d-flex align-items-center">
+                            <input type="hidden" value="false" name="fireplace">
+                            <div class="d-flex align-items-center">
+                                <div class="item-body"></div>
+                                <p>- Fireplace</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="controller"><i class="mdi mdi-plus-circle"></i> <span>More option</span></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="map-section d-block d-md-flex house-area-wrapper">
+        <div class="map-wrapper">
+            <div class="filter-type-wrapper d-flex justify-content-center">
+                <span class="filter-type">For sale <i class="mdi mdi-menu"></i></span>
+            </div>
+            <div id="map" class="mapsizer"></div>
+        </div>
+
+        <div id="listings" class="flex-column">
+            <div class="content d-flex flex-column justify-content-between">
+		
+                <p><h1 style="font-weight:bold;padding-right:10px;">Innisfil Real Estate for Sale</h1>Innisfil is a rapidly developing community located only 80 min away from downtown Toronto. It has historically been a rural area, but growth in the Barrie area and the Greater Toronto Area has meant greater residential development in Innisfil , which still continues to develop and grow. Innisfil offers a variety of all-season outdoor activities., schools, shops, restaurants ,beaches and much more. </p>
+            </div>
+            <div class="masonry_cont_wrapper">
+                <div class="masonry_cont no-destroyed ">
+				</div>
+
+                <div class="sort-Listing sort-types">
+                    <a class="sort-button-mobile"><i class="mdi mdi-format-list-bulleted-type"></i> Sort by</a>
+                    <div class="sort-wrapper-desctop d-flex justify-content-center">
+                        <ul>
+                            <li class="sort-rate active" data-rate="low">Price low to high</li>
+                            <li class="sort-rate" data-rate="hight">Price high to low</li>
+                            <li class="sort-rate" data-rate="new">New</li>
+                            <li class="sort-rate" data-rate="old">Old</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-inline-flex map-regime-controller">
+            <span class="select-regime-marker active">Map</i></span>
+            <span class="select-regime-list">List</span>
+        </div>
+        <div class="filter d-flex align-items-center justify-content-center">
+            <a class="filter-button"><i class="mdi mdi-image-filter-frames"></i> Filter</a>
+            <a class="sort-button"><i class="mdi mdi-format-list-bulleted-type"></i> Sort by</a>
+            <a class="book_viewing" href="https://www.homeads.ca"><i class="mdi mdi-heart"></i> Book Viewing</a>
+            <div class="container_viewing">
+                <div class="result">
+                    <div class="controller d-flex justify-content-between align-items-center">
+                        <i class="mdi mdi-delete-forever"></i>
+                        <i class="filter-closer mdi mdi-close-box-outline"></i>
+                    </div>
+                    <div class="result-cont">
+
+                    </div>
+                    <div class="send-form d-flex flex-column align-items-lg-start">
+                        <h4>Send Lists</h4>
+                        <input type="text" placeholder="Name" name="S_user-name">
+                        <input type="tel" placeholder="Phone" name="S_user-phone">
+                        <input type="email" placeholder="Email" name="S_user-mail">
+                        <div class="d-flex align-items-center">
+                            <span class="send-button">Send</span>
+                            <span class="send-preload hidden"></span>
+                            <span class="send-ok hidden d-flex align-items-center"><i
+                                        class="mdi mdi-checkbox-marked"></i> - Request Sent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sort-wrapper sort-types d-flex justify-content-center">
+            <ul>
+                <li class="sort-rate active" data-rate="low">Price low to high</li>
+                <li class="sort-rate" data-rate="hight">Price high to low</li>
+                <li class="sort-rate" data-rate="new">New</li>
+                <li class="sort-rate" data-rate="old">Old</li>
+            </ul>
+        </div>
+    </div>
+
+            <div class="home_links-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-100">
+			                        <h2>Communities Around Innisfil</h2>
+			                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-100">
+                        <ul class="d-flex align-items-center flex-wrap">
+                            <li><a href="https://www.homeads.ca/alcona-on-real-estate">Alcona</a></li><li><a href="https://www.homeads.ca/belle-ewart-on-real-estate">Belle Ewart</a></li><li><a href="https://www.homeads.ca/cookstown-on-real-estate">Cookstown</a></li><li><a href="https://www.homeads.ca/lefroy-on-real-estate">Lefroy</a></li><li><a href="https://www.homeads.ca/stroud-on-real-estate">Stroud</a></li><li><a href="https://www.homeads.ca/friday-harbour-on-real-estate">Friday Harbour</a></li><li><a href="https://www.homeads.ca/big-bay-point-on-real-estate">Big Bay Point</a></li><li><a href="https://www.homeads.ca/cedar-mount-on-real-estate">Cedar Mount</a></li><li><a href="https://www.homeads.ca/peninsular-park-on-real-estate">Peninsular Park</a></li><li><a href="https://www.homeads.ca/sandy-cove-acres-on-real-estate">Sandy Cove Acres</a></li><li><a href="https://www.homeads.ca/gilford-on-real-estate">Gilford</a></li><li><a href="https://www.homeads.ca/churchill-on-real-estate">Churchill</a></li>                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="state_info-wrapper">
+            <div class="container">
+                <div class="row">
+		                        <div class="col-100">
+                        <h2>Innisfil</h2>
+			<!--
+                        <h3>Demography</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium architecto consequatur culpa cum delectus dicta dignissimos eius eligendi esse est et eum excepturi exercitationem fugiat hic inventore, ipsam, magnam molestiae molestias mollitia neque odit officia porro praesentium provident quod saepe soluta tempora ullam vel voluptatem!</p>
+			-->
+                        <h3>Schools</h3>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Elementary School Name</th>
+                                    <th>Fraser Rating (out of 10.0)</th>
+                                </tr>
+				<tr><td>Sunnybrae</td><td>7.20</td></tr><tr><td>Lake Simcoe</td><td>6.40</td></tr><tr><td>Goodfellow</td><td>5.30</td></tr><tr><td>Holy Cross</td><td>5.20</td></tr><tr><td>Alcona Glen</td><td>3.80</td></tr><tr><td>St Francis of Assisi</td><td>3.40</td></tr>                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Secondary School Name</th>
+                                    <th>Fraser Rating (out of 10.0)</th>
+                                </tr>
+				<tr><td>Nantyr Shores</td><td>6.40</td></tr>                            </tbody>
+                        </table>
+
+                    </div>
+		                    </div>
+            </div>
+        </div>
+    
+
+        <div class="footer">
+        <div>
+            <div class="container">
+                <div class="row footer-menu justify-content-end">
+                    <div class="logo_wrapper">
+                        <a href="https://www.homeads.ca">
+                            <img src="//www.homeads.ca/src/img/sutton-logo2.png" alt="Logo">
+                        </a>
+                    </div>
+                    <div class="col-100 col-sm-50 col-md-20">
+                        <div class="footer-links-wrapper d-flex flex-column align-items-center align-items-md-start">
+                            <h3>Buy</h3>
+                            <ul>
+                             <li><a href="https://www.homeads.ca/property-search">Property Search</a></li>
+                             <li><a href="https://www.homeads.ca/first-time-home-buyers">First-Time Home Buyers</a></li>
+                             <li><a href="https://www.homeads.ca/new_listings_notification">New Listings Notification</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-100 col-sm-50 col-md-20">
+                        <div class="footer-links-wrapper d-flex flex-column align-items-center align-items-md-start">
+                            <h3>Sell</h3>
+                            <ul>
+                                <li><a href="https://www.homeads.ca/free-home-evaluation">Free Home Evaluation</a></li>
+                                <li><a href="https://www.homeads.ca/why-sell-with-us">Why Choose Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-100 col-sm-50 col-md-20">
+                        <div class="footer-links-wrapper d-flex flex-column align-items-center align-items-md-start">
+                                <li class="d-flex flex-column justify-content-center have-sub-menu"><a class="d-flex flex-nowrap" href="https://www.homeads.ca/relocation-support"><span class="d-inline-flex align-items-center flex-nowrap">Relocation Support</span></a></li>
+                        </div>
+                    </div>
+                    <div class="col-100 col-sm-50 col-md-20">
+                        <div class="footer-links-wrapper d-flex flex-column align-items-center align-items-md-start">
+                            <h3>Information</h3>
+                            <ul>
+                                <li><a href="https://www.homeads.ca/aboutme">About Me</a></li>
+                                <li><a href="https://www.homeads.ca/privacy">Privacy Policy</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-100 d-flex justify-content-center align-items-center social_links-wrapper">
+                        <ul class="d-flex justify-content-center align-items-center">
+                            <li class="d-flex justify-content-center align-items-center"><a href="https://www.facebook.com/homeads.ca"><i class="mdi mdi-facebook"></i></a></li>
+                            <li class="d-flex justify-content-center align-items-center"><a href="https://www.instagram.com/darya_strilyana"><i class="mdi mdi-instagram"></i></a></li>
+                            <li class="d-flex justify-content-center align-items-center"><a href="https://twitter.com/darya_strilyana"><i class="mdi mdi-twitter"></i></a></li>
+                            <li class="d-flex justify-content-center align-items-center"><a href="https://www.youtube.com/channel/UC5L2okLfwN0zucMeJUL2lWA?disable_polymer=true"><i class="mdi mdi-youtube"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-100 d-flex flex-column align-items-center justify-content-center">
+                        <p>Copyright &copy; 2018  Sutton Group Incentive Realty Inc., Brokerage. Independently owned and operated.</p>
+                        <p>All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123147440-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-123147440-1');
+    </script>
+
+    <!--
+    <script type="text/javascript">
+      window._mfq = window._mfq || [];
+      (function() {
+        var mf = document.createElement("script");
+        mf.type = "text/javascript"; mf.async = true;
+        mf.src = "//cdn.mouseflow.com/projects/0d0082bc-88ee-4812-874d-d553e005189c.js";
+        document.getElementsByTagName("head")[0].appendChild(mf);
+      })();
+    </script>
+    -->
+    <!-- Hotjar Tracking Code for www.homeads.ca -->
+    <!--
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:968263,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+    -->
+
+    
+    <script src="//www.homeads.ca/src/libs/jQuery/jquery-ui.js"></script>
+    <script src="//www.homeads.ca/src/libs/scroll-lock-master/scroll-lock.js"></script>
+    <script src="//www.homeads.ca/src/libs/jquery-touch-swipe/jquery.touchSwipe.js"></script>
+    <script src="//www.homeads.ca/src/libs/Bricks/bricks.js"></script>
+    <script src="//www.homeads.ca/src/libs/perfect-scrollbar-master/dist/perfect-scrollbar.js"></script>
+    <script src="//www.homeads.ca/src/libs/OwlCarousel2/owl.carousel.min.js"></script>
+    <script src="//www.homeads.ca/src/libs/rrssb-master/js/rrssb.min.js"></script>
+    <script src="//www.homeads.ca/src/libs/jquery-homenote-master/jquery.homenote.js"></script>
+
+
+    <script>
+        // filter default val
+
+        var 
+	residential = '',
+homeType = '1',
+            rentFrom = '', // val or '' (next logic - if value was 1000$ then it's will be in first category 0 ~ 1000$ etc)
+            rentTo = '', // val or '' (next logic - if value was 1000$ then it's will be in first category 0 ~ 1000$ etc)
+            interioFrom = '', // val or '' (next logic - if value was 1000$ then it's will be in first category 0 ~ 1000$ etc)
+            interioTo = '', // val or '' (next logic - if value was 1000$ then it's will be in first category 0 ~ 1000$ etc)
+            //dateD = '23 Jun, 18', // val or ''
+            dateD = '', // val or ''
+            beds = '', // val or ''
+            bath = '', // val or ''
+            openHouseOnly = '', // true or ''
+
+	   
+	priceFrom = '',
+priceTo = '',
+pool = '',
+waterfront = '',
+landType = '',
+bstories = '',
+attachstyle = '',
+            
+            fireplace = ''; // true or ''
+
+        if (residential !== 0) {
+            $('.li[data-val="2"]').html('For lease');
+        } else {
+            $('.li[data-val="2"]').html('For rent');
+        }
+
+    </script>
+    <script src="./js/leafletembed1.js"></script>
+    <script src="//www.homeads.ca/src/js/map-page.js"></script>
+
+    <script>
+        window.lazySizesConfig = window.lazySizesConfig || {};
+    </script>
+    <script src="//www.homeads.ca/src/libs/Isotope/lazysizes.js" async=""></script>
+
+
+    <!--main
+	js-->
+    <script src="//www.homeads.ca/src/js/main.js"></script>
+
+
+    <!--map-->
+
+    <script>
+            initMap(44.276171, -79.614739, 12);
+    </script>
+    </body>
+</html>
