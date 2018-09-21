@@ -403,6 +403,83 @@ L.control.gmxIconGroup = function (options) {
 };
 
 })();
+(function () {
+var drawingIcons = ['Point', 'Polygon', 'Polyline', 'Rectangle'];
+L.Control.GmxDrawing = L.Control.GmxIconGroup.extend({
+    options: {
+        position: 'topleft',
+        singleSelection: true,
+        isSortable: true,
+        id: 'drawing',
+        items: null
+    },
+
+    onAdd: function (map) {
+        var _this = this;
+        this.setActive = function (key) {
+            if (map.gmxDrawing) {
+                map.gmxDrawing.bringToFront();
+                map.gmxDrawing.create(key, _this.options.drawOptions);
+            }
+        };
+        this.on('activechange', function (ev) {
+            var activeIcon = ev.activeIcon;
+            for (var i = 0, len = drawingIcons.length; i < len; i++) {
+                if (activeIcon === drawingIcons[i]) {
+                    return;
+                }
+            }
+            _this.setActive();
+        });
+
+        if (map.gmxDrawing) {
+            map.gmxDrawing.on('drawstop', function (ev) {
+                var opt = ev.object._obj.options || {};
+                if (!opt.ctrlKey && !opt.shiftKey) {
+                    _this.setActiveIcon();
+                } else {
+                    _this.setActive(ev.object.options.type);
+                }
+            }, this);
+        }
+        var addIcon = function (key) {
+            return L.control.gmxIcon({
+                id: key,
+                //className: 'leaflet-gmx-icon-sprite',
+                title: _this._locale && 'getText' in _this._locale ? _this._locale.getText(key) : key,
+                togglable: true
+              })
+              .on('statechange', function (ev) {
+                var opt = ev.target.options,
+                    id = opt.id;
+
+                if (id === _this.activeIcon) {
+                    _this.setActive();
+                } else if (opt.isActive) {
+                    _this.setActive(id);
+                }
+            });
+        };
+        var defaultIcons = this.options.items || drawingIcons;
+        this.options.items = [];
+        defaultIcons.forEach(function (it) {
+            _this.options.items.push(it instanceof L.Control.GmxIcon ? it : addIcon(it));
+        });
+        return L.Control.GmxIconGroup.prototype.onAdd.call(this, map);
+    }
+});
+
+L.Control.gmxDrawing = L.Control.GmxDrawing;
+L.control.gmxDrawing = function (options) {
+  return new L.Control.GmxDrawing(options);
+};
+
+L.Control.GmxDrawing.locale = {};
+L.Control.GmxDrawing.addInitHook(function () {
+    this._locale = L.Control.GmxDrawing.locale;
+    L.extend(this._locale, L.gmxLocaleMixin);
+});
+})();
 
 L.Map.addInitHook(function () {
     var corners = this._controlCorners,
@@ -425,4 +502,33 @@ L.Map.addInitHook(function () {
             corners[key] = L.DomUtil.create('div', classNames[key], parent);
         }
     }
+	
+/*
+        var prefix = 'http://maps.kosmosnimki.ru/GetImage.ashx?usr=khaibrik%40scanex.ru&img=',
+            onClick = function (ev) {
+                console.log('click', arguments);
+            },
+            statechange = function (ev) {
+                console.log('statechange', arguments, ev.target.options.isActive);
+            };
+
+        MAP.addControl(L.control.gmxIconGroup({
+            id: 'myGroupControl',
+            singleSelection: true,
+            isSortable: true,
+            items: [
+                L.control.gmxIcon({
+                    id: 'test1', title: 'Test icon', regularImageUrl: prefix + 'sled_walf.png'
+                    })
+                    .on('click', onClick)
+                    .on('statechange', statechange)
+                ,
+                L.control.gmxIcon({
+                    id: 'test2', title: 'Test icon2', regularImageUrl: prefix + 'logovo_walf.png'
+                    })
+                    .on('click', onClick)
+                    .on('statechange', statechange)
+            ]
+        }));
+*/
 });
