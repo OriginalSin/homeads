@@ -7684,5 +7684,11 @@ L.Map.addInitHook(function () {
                     .on('statechange', statechange)
             ]
         }));
+	L.gmxUtil.requestLink('//www.kosmosnimki.ru/lib/geomixer_1.3/geomixer.css').then(function(ev) {
+		console.log('glfx', window.fx);
+	});
 */
+	MAP.addControl(new L.Control.gmxDrawing());
+	L.gmxUtil.requestLink('//www.kosmosnimki.ru/lib/geomixer_1.3/geomixer.css');
+
 });
