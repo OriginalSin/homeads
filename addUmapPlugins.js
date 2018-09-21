@@ -7688,7 +7688,7 @@ L.Map.addInitHook(function () {
 		console.log('glfx', window.fx);
 	});
 */
-	this.addControl(new L.Control.gmxDrawing());
+	this.addControl(new L.Control.gmxDrawing({position: 'topright'}));
 	L.gmxUtil.requestLink('//www.kosmosnimki.ru/lib/geomixer_1.3/geomixer.css');
 
 });
