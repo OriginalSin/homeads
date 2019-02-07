@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4fc08d">
+    <title>masked-input</title>
+	
+<script>
+function checkPhone(it) {
+	var v = it.value.replace(/[^-\d]/g, '');
+	if (v.match(/^\d{3}$/) !== null || v.match(/^\d{3}\-\d{3}$/) !== null) {
+		v += '-';
+	}
+	it.value = v;
+}
+</script>
+
+</head>
+
+<body>
+
+<input type="text" name="phone" placeholder="Phone number: 999-999-9999" onkeyup="checkPhone(this)" maxlength="12">
+  
+</body>
+</html>
