@@ -11,19 +11,30 @@
 	
 <script>
 function checkPhone(it) {
-	var v = it.value.replace(/[^-\d]/g, '');
-	if (v.match(/^\d{3}$/) !== null || v.match(/^\d{3}\-\d{3}$/) !== null) {
+	var v = it.value.replace(/[^-\(\)\s\d]/g, '');
+	if (v.match(/^\d$/) !== null) {
+		v = '(' + v;
+	} else if (v.match(/^\(\d{3}$/) !== null) {
+		v += ') ';
+	} else if (v.match(/^\(\d{3}\) \d{3}$/) !== null) {
 		v += '-';
 	}
 	it.value = v;
+}
+function sendBigPopupForm() {
+	var node = document.getElementsByName('phone')[0];
+	if (node.value.match(/^\(\d{3}\) \d{3}-\d{4}$/) === null) {
+		alert('Надо поправить поле');
+	} else {
+		alert('Все хорошо');
+	}
 }
 </script>
 
 </head>
 
 <body>
-
-<input type="text" name="phone" placeholder="Phone number: 999-999-9999" onkeyup="checkPhone(this)" maxlength="12">
-  
+<input type="text" name="phone" placeholder="Phone number: 999-999-9999" onkeyup="checkPhone(this)" maxlength="14">
+<button class="f_button" onclick="sendBigPopupForm()">Submit Request</button>
 </body>
 </html>
